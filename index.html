@@ -511,14 +511,14 @@ function renderContacts() {
 function getReminderFlags(c) {
   const flags = [];
   const today = new Date(); today.setHours(0,0,0,0);
-  if (c.nextFollowUp && new Date(c.nextFollowUp) <= today)
+  if (c.nextFollowUp && parseDate(c.nextFollowUp) <= today)
     flags.push('<span class="reminder-dot dot-amber" title="Follow-up due"></span>');
   if (c.status === "Active" && c.lastContactDate) {
-    const d = Math.floor((today - new Date(c.lastContactDate)) / 86400000);
+    const d = Math.floor((today - parseDate(c.lastContactDate)) / 86400000);
     if (d >= 30) flags.push('<span class="reminder-dot dot-red" title="No contact 30+ days"></span>');
   }
   if (c.contractRenewalDate) {
-    const d = Math.floor((new Date(c.contractRenewalDate) - today) / 86400000);
+    const d = Math.floor((parseDate(c.contractRenewalDate) - today) / 86400000);
     if (d >= 0 && d <= 30) flags.push('<span class="reminder-dot dot-green" title="Renewal in ' + d + 'd"></span>');
   }
   return flags.length ? `<span style="display:inline-flex;gap:3px;margin-left:6px;vertical-align:middle;">${flags.join("")}</span>` : "";
@@ -527,8 +527,7 @@ function getReminderFlags(c) {
 function followUpCell(c) {
   if (!c.nextFollowUp) return '<span style="color:#ccc">—</span>';
   const today = new Date(); today.setHours(0,0,0,0);
-  const d = new Date(c.nextFollowUp);
-  const overdue = d < today;
+  const overdue = parseDate(c.nextFollowUp) < today;
   return `<span class="${overdue ? 'badge badge-overdue' : ''}">${fmt(c.nextFollowUp)}</span>`;
 }
 
@@ -542,15 +541,15 @@ function setFilter(f, el) {
 
 function updateStats() {
   const today = new Date(); today.setHours(0,0,0,0);
-  const active = contacts.filter(c => c.status === "Active").length;
-  const followups = contacts.filter(c => c.nextFollowUp && new Date(c.nextFollowUp) <= today).length;
+  const active    = contacts.filter(c => c.status === "Active").length;
+  const followups = contacts.filter(c => c.nextFollowUp && parseDate(c.nextFollowUp) <= today).length;
   const renewals  = contacts.filter(c => {
     if (!c.contractRenewalDate) return false;
-    const d = Math.floor((new Date(c.contractRenewalDate) - today) / 86400000);
+    const d = Math.floor((parseDate(c.contractRenewalDate) - today) / 86400000);
     return d >= 0 && d <= 30;
   }).length;
-  document.getElementById("stat-total").textContent    = contacts.length;
-  document.getElementById("stat-active").textContent   = active;
+  document.getElementById("stat-total").textContent     = contacts.length;
+  document.getElementById("stat-active").textContent    = active;
   document.getElementById("stat-followups").textContent = followups;
   document.getElementById("stat-renewals").textContent  = renewals;
 }
@@ -672,9 +671,28 @@ function statusBadge(s) {
   return `<span class="badge ${map[s] || 'badge-dormant'}">${s || "Unknown"}</span>`;
 }
 
+function parseDate(d) {
+  if (!d) return null;
+  if (String(d).includes("/")) {
+    const [month, day, year] = String(d).split("/");
+    return new Date(year, month - 1, day);
+  }
+  return new Date(d + "T00:00:00");
+}
+  
 function fmt(d) {
   if (!d) return "";
-  const dt = new Date(d + "T00:00:00");
+  // Handle MM/DD/YYYY from Google Sheets AND YYYY-MM-DD from the date picker
+  let dt;
+  if (String(d).includes("/")) {
+    // Google Sheets format: MM/DD/YYYY
+    const [month, day, year] = String(d).split("/");
+    dt = new Date(year, month - 1, day);
+  } else {
+    // ISO format: YYYY-MM-DD
+    dt = new Date(d + "T00:00:00");
+  }
+  if (isNaN(dt)) return "";
   return dt.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
 }
 
