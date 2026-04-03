@@ -29,17 +29,17 @@ Gmail SMTP → your inbox
 
 ### Step 1 — Fork / push this repo to GitHub
 
-1. Create a new repo at github.com (e.g. `mphealthsolutions/crm`)
+1. Create a new repo at github.com
 2. Push all files from this folder to that repo
 3. In repo **Settings → Pages**, set source to `main` branch, root `/`
-4. Your app will be live at `https://mphealthsolutions.github.io/crm`
+4. Your app will be live at `https://xxxxxx.github.io/crm`
 
 ---
 
 ### Step 2 — Create the Google Sheet
 
 1. Go to [sheets.google.com](https://sheets.google.com) and create a new spreadsheet
-2. Name it **MPHS CRM**
+2. Name it **xxxx CRM**
 3. Leave it blank — the Apps Script will create the headers automatically
 
 ---
@@ -65,7 +65,7 @@ Gmail SMTP → your inbox
 
 1. Go to your Google account → **Security → 2-Step Verification** (must be enabled)
 2. Search for **App Passwords** at [myaccount.google.com/apppasswords](https://myaccount.google.com/apppasswords)
-3. Create a new App Password → Select app: **Mail**, device: **Other** → name it "MPHS CRM"
+3. Create a new App Password → Select app: **Mail**, device: **Other** → name it "xxxx CRM"
 4. **Copy the 16-character password**
 
 ---
@@ -77,7 +77,7 @@ In your GitHub repo → **Settings → Secrets and variables → Actions → New
 | Secret Name      | Value |
 |-----------------|-------|
 | `APPS_SCRIPT_URL` | The Web App URL from Step 3 |
-| `GMAIL_USER`      | your Google Workspace email (e.g. `ajit@mphealthsolutions.com`) |
+| `GMAIL_USER`      | your Google Workspace email |
 | `GMAIL_APP_PASS`  | The 16-char App Password from Step 4 |
 | `REMINDER_TO`     | Email to receive reminders (can be same as GMAIL_USER) |
 | `CLAUDE_API_KEY`  | *(Optional)* Your Anthropic API key for AI email summaries |
