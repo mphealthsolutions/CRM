@@ -1,0 +1,29 @@
+name: Daily CRM Reminders
+
+on:
+  schedule:
+    # Runs every weekday at 8:00 AM Eastern (12:00 UTC)
+    - cron: "0 12 * * 1-5"
+  workflow_dispatch: # Allow manual trigger from GitHub UI
+
+jobs:
+  send-reminders:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Run reminder script
+        env:
+          APPS_SCRIPT_URL: ${{ secrets.APPS_SCRIPT_URL }}
+          GMAIL_USER:       ${{ secrets.GMAIL_USER }}
+          GMAIL_APP_PASS:   ${{ secrets.GMAIL_APP_PASS }}
+          REMINDER_TO:      ${{ secrets.REMINDER_TO }}
+          CLAUDE_API_KEY:   ${{ secrets.CLAUDE_API_KEY }}
+        run: python scripts/send_reminders.py
