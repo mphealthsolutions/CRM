@@ -75,9 +75,9 @@ def draft_ai_summary(reminders):
 # ── Build HTML email ─────────────────────────────────────────
 
 TYPE_META = {
-    "follow_up": {"icon": "📅", "label": "Follow-Up Due",      "color": "#013e86"},
-    "check_in":  {"icon": "🔔", "label": "Check-In Overdue",   "color": "#ff8200"},
-    "renewal":   {"icon": "📄", "label": "Contract Renewal",   "color": "#0F6E56"},
+    "follow_up": {"icon": "📅", "label": "Follow-Up Due",      "color": "#0270C2"},
+    "check_in":  {"icon": "🔔", "label": "Check-In Overdue",   "color": "#FF8200"},
+    "renewal":   {"icon": "📄", "label": "Contract Renewal",   "color": "#013E86"},
 }
 
 def build_email(reminders, ai_summary=None):
@@ -90,7 +90,7 @@ def build_email(reminders, ai_summary=None):
         c    = r["contact"]
         rows += f"""
         <tr>
-          <td style="padding:14px 16px;border-bottom:1px solid #e6f4ee;">
+          <td style="padding:14px 16px;border-bottom:1px solid #e8f0fb;">
             <div style="font-size:11px;font-weight:700;letter-spacing:.06em;
                         color:{meta['color']};text-transform:uppercase;margin-bottom:4px;">
               {meta['icon']} {meta['label']}
@@ -99,10 +99,10 @@ def build_email(reminders, ai_summary=None):
             <div style="font-size:13px;color:#666666;">{c.get('company','')} · {c.get('title','')}</div>
             <div style="font-size:12px;color:#999;margin-top:2px;">{r['message']}</div>
           </td>
-          <td style="padding:14px 16px;border-bottom:1px solid #e6f4ee;
+          <td style="padding:14px 16px;border-bottom:1px solid #e8f0fb;
                      vertical-align:top;white-space:nowrap;">
             <a href="mailto:{c.get('email','')}"
-               style="display:inline-block;padding:6px 14px;background:#0F6E56;
+               style="display:inline-block;padding:6px 14px;background:#FF8200;
                       color:#fff;border-radius:6px;text-decoration:none;
                       font-size:12px;font-weight:600;">
               Email
@@ -113,10 +113,10 @@ def build_email(reminders, ai_summary=None):
     ai_block = ""
     if ai_summary:
         ai_block = f"""
-        <div style="margin:24px 0;padding:18px 20px;background:#e6f4ee;
-                    border-left:3px solid #0F6E56;border-radius:4px;">
+        <div style="margin:24px 0;padding:18px 20px;background:#e8f0fb;
+                    border-left:3px solid #0270C2;border-radius:4px;">
           <div style="font-size:11px;font-weight:700;letter-spacing:.08em;
-                      color:#0F6E56;text-transform:uppercase;margin-bottom:8px;">
+                      color:#0270C2;text-transform:uppercase;margin-bottom:8px;">
             AI Morning Briefing
           </div>
           <div style="font-size:14px;color:#111111;line-height:1.6;">
@@ -130,24 +130,24 @@ def build_email(reminders, ai_summary=None):
         </div>"""
 
     html = f"""<!DOCTYPE html>
-<html><body style="margin:0;padding:0;background:#f8f8f6;font-family:'Inter','Helvetica Neue',Arial,sans-serif;">
+<html><body style="margin:0;padding:0;background:#f4f6fb;font-family:'Inter','Helvetica Neue',Arial,sans-serif;">
   <div style="max-width:600px;margin:32px auto;background:#fff;
               border-radius:12px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,.08);">
 
     <!-- Header -->
-    <div style="background:#0F6E56;padding:28px 32px;">
+    <div style="background:#013E86;padding:28px 32px;">
       <img src="https://www.mphealthsolutions.com/logo-mp-health.png"
            alt="M&amp;P Health Solutions" height="36"
            style="display:block;margin-bottom:16px;" />
       <div style="font-size:22px;font-weight:700;color:#fff;">
         CRM Daily Digest
       </div>
-      <div style="font-size:13px;color:#e6f4ee;margin-top:4px;">{today}</div>
+      <div style="font-size:13px;color:#a8c4e8;margin-top:4px;">{today}</div>
     </div>
 
     <!-- Summary bar -->
-    <div style="background:#e6f4ee;padding:14px 32px;border-bottom:1px solid #d7e4f1;">
-      <span style="font-size:13px;color:#0F6E56;font-weight:600;">
+    <div style="background:#e8f0fb;padding:14px 32px;border-bottom:1px solid #c8d8f0;">
+      <span style="font-size:13px;color:#013E86;font-weight:600;">
         {f'{count} reminder{"s" if count != 1 else ""} require your attention today.'
          if count else 'All clear — no reminders due today.'}
       </span>
@@ -161,7 +161,7 @@ def build_email(reminders, ai_summary=None):
     </div>
 
     <!-- Footer -->
-    <div style="padding:20px 32px;border-top:1px solid #e6f4ee;
+    <div style="padding:20px 32px;border-top:1px solid #e8f0fb;
                 font-size:11px;color:#666666;text-align:center;">
       Sent automatically by your MPHS CRM &nbsp;·&nbsp; GitHub Actions
     </div>
